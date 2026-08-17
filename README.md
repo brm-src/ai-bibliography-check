@@ -25,7 +25,7 @@ It is an editorial checker, not a citation database and not a forensic AI detect
 omarchy plugin add https://github.com/brm-src/ai-bibliography-check.git --enable --yes
 ```
 
-No sudo or pkexec is required. The plugin needs Omarchy/Hyprland, Quickshell, Python 3, `curl`, and `wl-paste`.
+No administrator privileges are required. The plugin needs Omarchy/Hyprland, Quickshell, Python 3, `curl`, and `wl-paste`.
 
 The optional `Super + Shift + B` shortcut is configured separately:
 
@@ -77,7 +77,7 @@ See [PRIVACY.md](PRIVACY.md).
 Run these from the repository root:
 
 ```bash
-python3 -m pytest tests -q
+python3 -m unittest discover -s tests -q
 python3 -m py_compile bibliography_check.py
 bash -n configure-shortcut.sh
 qmllint -I /usr/share/omarchy/shell BarButton.qml BibliographyCheck.qml
