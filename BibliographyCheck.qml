@@ -190,7 +190,7 @@ Item {
     BorderSurface {
       id: card
       width: root.cardWidth
-      height: root.cardHeight + (root.infoOpen ? Style.space(72) : 0)
+      height: root.cardHeight + (root.infoOpen ? Style.space(110) : 0)
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.topMargin: Style.bar.sizeHorizontal + Style.gapsOut
@@ -241,11 +241,14 @@ Item {
               wrapMode: Text.Wrap
             }
           }
-          Button {
+          PanelActionButton {
             id: infoButton
             anchors.verticalCenter: parent.verticalCenter
-            text: "(i)"
-            selected: root.infoOpen
+            size: Style.space(24)
+            iconText: "ⓘ"
+            foreground: Color.menu.text
+            hoverColor: Color.accent
+            bordered: root.infoOpen
             tooltipText: root.words("Cómo revisa la bibliografía", "How the bibliography is checked")
             onClicked: root.infoOpen = !root.infoOpen
           }
@@ -272,8 +275,8 @@ Item {
             anchors.fill: parent
             anchors.margins: Style.spacing.md
             text: root.words(
-              "Cómo revisa: separa las entradas, busca autor y año, normaliza DOI/URL, detecta duplicados, compara estilos de fecha y pasa los primeros 3.000 caracteres por aismell.",
-              "How it checks: splits entries, looks for author and year, normalizes DOI/URLs, detects duplicates, compares date styles, and sends the first 3,000 characters through aismell.")
+              "Fuente: texto pegado. Parser: límites por líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: prefijo de autor, primer año, tramo de título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
+              "Source: pasted text. Parser: blank-line boundaries, [n]/1. markers, and author-year cuts. Fields: author prefix, first year, title span, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
             color: Color.menu.text
             opacity: 0.76
             font.family: Style.font.menuFamily
