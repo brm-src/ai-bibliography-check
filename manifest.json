@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.brm-src.ai-bibliography-check",
+  "name": "ai bibliography check",
+  "version": "1.0.0",
+  "author": "Cris",
+  "homepage": "https://aismell.me",
+  "description": "Revisa estructura, consistencia, duplicados y señales de aismell en bibliografías pegadas.",
+  "kinds": ["panel", "bar-widget"],
+  "keepLoaded": true,
+  "entryPoints": {
+    "panel": "BibliographyCheck.qml",
+    "barWidget": "BarButton.qml"
+  },
+  "barWidget": {
+    "displayName": "ai bibliography check",
+    "description": "Revisa una bibliografía sin fingir verificación externa.",
+    "category": "Plugin",
+    "defaultSection": "right",
+    "allowMultiple": false
+  }
+}

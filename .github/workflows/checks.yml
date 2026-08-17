@@ -1,0 +1,28 @@
+name: Plugin checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Run Python tests
+        run: python -m pytest tests -q
+      - name: Compile Python helper
+        run: python -m py_compile bibliography_check.py
+      - name: Check shortcut helper
+        run: bash -n configure-shortcut.sh
+      - name: Validate manifest JSON
+        run: python -m json.tool manifest.json >/dev/null

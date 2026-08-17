@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">ai bibliography check preview</title>
+  <desc id="desc">Dark Omarchy panel showing a bibliography score and review findings.</desc>
+  <rect width="1200" height="720" fill="#111318"/>
+  <rect x="660" y="42" width="480" height="636" rx="18" fill="#20232b" stroke="#454956" stroke-width="2"/>
+  <text x="694" y="91" fill="#f1f2f5" font-family="sans-serif" font-size="28" font-weight="700">revisar bibliografía</text>
+  <text x="694" y="124" fill="#a8acb8" font-family="sans-serif" font-size="15">Estructura, duplicados y señales de aismell.</text>
+  <text x="694" y="167" fill="#f1f2f5" font-family="sans-serif" font-size="15">Revisión lista. Lee los hallazgos antes de corregir.</text>
+  <rect x="694" y="190" width="412" height="5" rx="2.5" fill="#474b58"/>
+  <rect x="694" y="216" width="412" height="132" rx="10" fill="#292d37" stroke="#5f6472"/>
+  <text x="712" y="246" fill="#9297a6" font-family="sans-serif" font-size="14">Bibliografía pegada</text>
+  <text x="712" y="275" fill="#e3e5ea" font-family="sans-serif" font-size="14">[1] García, M. (2024). Manual de investigación.</text>
+  <text x="712" y="300" fill="#e3e5ea" font-family="sans-serif" font-size="14">[2] Smith, J. 2024. A clear paper.</text>
+  <rect x="694" y="367" width="412" height="42" rx="8" fill="#e0228f"/>
+  <text x="712" y="394" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="700">86/100</text>
+  <text x="820" y="394" fill="#ffffff" font-family="sans-serif" font-size="15">conviene revisar</text>
+  <text x="694" y="440" fill="#f08ebf" font-family="sans-serif" font-size="15">• Entrada 2 · No encontré un autor reconocible</text>
+  <text x="694" y="472" fill="#d1d4dc" font-family="sans-serif" font-size="15">• La lista mezcla estilos de año</text>
+  <text x="694" y="504" fill="#d1d4dc" font-family="sans-serif" font-size="15">• DOI o URL repetido en la entrada 1</text>
+  <text x="694" y="622" fill="#969ba9" font-family="sans-serif" font-size="14">powered by: aismell</text>
+</svg>
