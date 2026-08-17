@@ -91,7 +91,7 @@ Item {
       root.status = root.words("Pega o escribe una bibliografía primero.", "Paste or type a bibliography first.")
       return
     }
-    root.status = root.words("Revisando estructura y señales de aismell…", "Checking structure and aismell signals…")
+    root.status = root.words("Buscando en Crossref y OpenAlex; analizando señales de aismell…", "Searching Crossref and OpenAlex; analyzing aismell signals…")
     root.runHelper("check-stdin", root.sourceText, function(payload) {
       if (!payload.ok) {
         root.hasReport = false
@@ -115,6 +115,28 @@ Item {
   function findingLabel(item) {
     var number = item.entry ? (root.words("Entrada ", "Entry ") + item.entry + " · ") : ""
     return number + String(item.message || "")
+  }
+
+  function lookupSummary() {
+    var lookup = root.report.lookup || ({})
+    var results = lookup.results || []
+    var found = results.filter(function(item) { return item.status === "found" }).length
+    var possible = results.filter(function(item) { return item.status === "possible" }).length
+    return root.words(
+      "Búsqueda externa: " + found + " coincidencias" + (possible ? " · " + possible + " posibles" : "") + " · Crossref + OpenAlex",
+      "External search: " + found + " matches" + (possible ? " · " + possible + " possible" : "") + " · Crossref + OpenAlex")
+  }
+
+  function lookupLabel(item) {
+    var status = item.status === "found"
+      ? root.words("encontrada", "found")
+      : item.status === "possible"
+        ? root.words("posible", "possible")
+        : item.status === "not-found"
+          ? root.words("sin coincidencia", "no match")
+          : root.words("servicio no disponible", "service unavailable")
+    var source = item.match ? item.match.source : (item.sources || []).map(function(source) { return source.source }).join(" + ")
+    return root.words("Entrada ", "Entry ") + item.entry + " · " + status + " · " + source
   }
 
   IpcHandler {
@@ -190,7 +212,7 @@ Item {
     BorderSurface {
       id: card
       width: root.cardWidth
-      height: root.cardHeight + (root.infoOpen ? Style.space(110) : 0)
+      height: root.cardHeight + (root.infoOpen ? Style.space(140) : 0)
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.topMargin: Style.bar.sizeHorizontal + Style.gapsOut
@@ -275,8 +297,8 @@ Item {
             anchors.fill: parent
             anchors.margins: Style.spacing.md
             text: root.words(
-              "Fuente: texto pegado. Parser: límites por líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: prefijo de autor, primer año, tramo de título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
-              "Source: pasted text. Parser: blank-line boundaries, [n]/1. markers, and author-year cuts. Fields: author prefix, first year, title span, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
+              "Fuente: texto pegado. Búsqueda externa: Crossref REST y OpenAlex Works, por DOI exacto o consulta de título + autor + año. Parser: líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: autor, año, título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
+              "Source: pasted text. External search: Crossref REST and OpenAlex Works, by exact DOI or title + author + year query. Parser: blank lines, [n]/1. markers, and author-year cuts. Fields: author, year, title, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
             color: Color.menu.text
             opacity: 0.76
             font.family: Style.font.menuFamily
@@ -449,6 +471,28 @@ Item {
               font.family: Style.font.menuFamily
               font.pixelSize: Style.font.caption
               wrapMode: Text.Wrap
+            }
+            Text {
+              width: parent.width
+              visible: root.report.lookup !== undefined
+              text: root.lookupSummary()
+              color: Color.accent
+              opacity: 0.82
+              font.family: Style.font.menuFamily
+              font.pixelSize: Style.font.bodySmall
+              wrapMode: Text.Wrap
+            }
+            Repeater {
+              model: root.report.lookup ? (root.report.lookup.results || []) : []
+              delegate: Text {
+                width: resultsColumn.width
+                text: "• " + root.lookupLabel(modelData)
+                color: modelData.status === "found" ? Color.accent : Color.menu.text
+                opacity: modelData.status === "found" ? 0.92 : 0.62
+                font.family: Style.font.menuFamily
+                font.pixelSize: Style.font.caption
+                wrapMode: Text.Wrap
+              }
             }
             Repeater {
               model: root.report.findings || []

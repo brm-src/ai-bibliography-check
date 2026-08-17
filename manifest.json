@@ -14,7 +14,7 @@
   },
   "barWidget": {
     "displayName": "ai bibliography check",
-    "description": "Revisa una bibliografía sin fingir verificación externa.",
+    "description": "Revisa estructura y contrasta entradas bibliográficas con Crossref y OpenAlex, junto con señales de aismell.",
     "category": "Plugin",
     "defaultSection": "right",
     "allowMultiple": false

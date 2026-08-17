@@ -8,9 +8,9 @@
 
 ![ai bibliography check preview](preview.svg)
 
-A bilingual Omarchy / Quickshell panel for reviewing pasted bibliographies before submission. It checks the text you provide for missing authors or years, duplicate DOI/URLs, mixed year styles, and formulaic writing signals from aismell.
+A bilingual Omarchy / Quickshell panel for reviewing pasted bibliographies before submission. It checks the text you provide for missing authors or years, duplicate DOI/URLs, mixed year styles, formulaic writing signals from aismell, and external catalog matches from Crossref and OpenAlex.
 
-It is an editorial checker, not a citation database and not a forensic AI detector. It does not claim that a paper exists, that a DOI resolves, or that metadata matches Crossref, Scopus, Google Scholar, or another catalog.
+It is an editorial checker, not a forensic AI detector. A catalog match is evidence to inspect, not proof that a source is valid or that every metadata field is correct.
 
 ## What it does
 
@@ -20,6 +20,8 @@ It is an editorial checker, not a citation database and not a forensic AI detect
 - Flags entries without a recognizable author or four-digit publication year.
 - Detects repeated DOI/URL identifiers and repeated full entries.
 - Warns when the list mixes parenthetical years like `(2024)` with bare years like `2024.`.
+- Sends DOI-bearing entries to Crossref and OpenAlex for exact lookup; entries without DOI use title + author + year queries.
+- Shows `found`, `possible`, `no match`, or `service unavailable` per entry and identifies the catalog that supplied a match.
 - Sends the first 3,000 characters to the aismell analyzer for formulaic-writing signals; structural checks cover the full pasted text.
 - Keeps the original text editable and never modifies the focused application automatically.
 
@@ -70,7 +72,8 @@ See [PRIVACY.md](PRIVACY.md).
 
 ## Limits you should know
 
-- This is not a bibliographic fact checker. It cannot prove that a citation is real or that metadata is correct.
+- Crossref and OpenAlex can return a catalog match, but that match still needs human review.
+- Entries without a DOI are searched by title + author + year and use a similarity score; a low score is shown as `no match`.
 - Author recognition is intentionally conservative and can flag valid styles that do not begin with a conventional author string.
 - Aismell sees only the first 3,000 characters for linguistic signals; local structural checks cover all 12,000 characters.
 - The endpoint requires an internet connection.

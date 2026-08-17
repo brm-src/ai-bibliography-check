@@ -8,9 +8,9 @@
 
 ![Vista previa de ai bibliography check](preview.svg)
 
-Panel bilingüe de Omarchy / Quickshell para revisar una bibliografía pegada antes de entregarla. Busca autores o años ausentes, DOI/URL duplicados, mezcla de estilos de año y señales de redacción formulaica de aismell.
+Panel bilingüe de Omarchy / Quickshell para revisar una bibliografía pegada antes de entregarla. Busca autores o años ausentes, DOI/URL duplicados, mezcla de estilos de año, señales de redacción formulaica de aismell y coincidencias en los catálogos Crossref y OpenAlex.
 
-Es un revisor editorial, no una base de datos de citas ni un detector forense de IA. No afirma que un paper exista, que un DOI resuelva ni que los metadatos coincidan con Crossref, Scopus, Google Scholar u otro catálogo.
+Es un revisor editorial, no un detector forense de IA. Una coincidencia de catálogo es evidencia para revisar, no una prueba absoluta de que la fuente sea válida o de que todos sus metadatos sean correctos.
 
 ## Qué hace
 
@@ -20,6 +20,8 @@ Es un revisor editorial, no una base de datos de citas ni un detector forense de
 - Marca entradas sin un autor reconocible o sin un año de publicación de cuatro dígitos.
 - Detecta DOI/URL repetidos y entradas completas duplicadas.
 - Avisa si la lista mezcla años entre paréntesis, como `(2024)`, con años sueltos, como `2024.`.
+- Envía las entradas con DOI a Crossref y OpenAlex para una búsqueda exacta; las entradas sin DOI usan consultas de título + autor + año.
+- Muestra `encontrada`, `posible`, `sin coincidencia` o `servicio no disponible` por entrada e identifica el catálogo que devolvió la coincidencia.
 - Envía los primeros 3.000 caracteres al analizador de aismell para buscar redacción formulaica; las comprobaciones estructurales cubren todo el texto pegado.
 - Mantiene el texto original editable y nunca modifica automáticamente la aplicación enfocada.
 
@@ -70,7 +72,8 @@ Consulta [PRIVACY.md](PRIVACY.md).
 
 ## Límites importantes
 
-- No es un verificador factual de bibliografía. No puede probar que una cita sea real ni que sus metadatos sean correctos.
+- Crossref y OpenAlex pueden devolver una coincidencia de catálogo, pero esa coincidencia todavía requiere revisión humana.
+- Las entradas sin DOI se buscan por título + autor + año y usan un score de similitud; un score bajo se muestra como `sin coincidencia`.
 - El reconocimiento de autores es deliberadamente conservador y puede marcar estilos válidos que no comiencen con un autor convencional.
 - Aismell solo ve los primeros 3.000 caracteres para señales lingüísticas; las comprobaciones estructurales cubren los 12.000 caracteres.
 - El endpoint requiere conexión a internet.
