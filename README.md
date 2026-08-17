@@ -1,5 +1,9 @@
 # ai bibliography check
 
+<p align="center">
+  <a href="https://www.ko-fi.com/brmcl"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" /></a>
+</p>
+
 [Español](README.es.md)
 
 ![ai bibliography check preview](preview.svg)
