@@ -136,6 +136,8 @@ Item {
           ? root.words("sin coincidencia", "no match")
           : root.words("servicio no disponible", "service unavailable")
     var source = item.match ? item.match.source : (item.sources || []).map(function(source) { return source.source }).join(" + ")
+    var unavailable = (item.sources || []).filter(function(source) { return source.status === "unavailable" }).map(function(source) { return source.source })
+    if (unavailable.length) source += root.words(" · " + unavailable.join(" + ") + " no disponible", " · " + unavailable.join(" + ") + " unavailable")
     return root.words("Entrada ", "Entry ") + item.entry + " · " + status + " · " + source
   }
 
