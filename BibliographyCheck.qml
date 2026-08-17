@@ -18,6 +18,7 @@ Item {
   property bool busy: false
   property bool backdropReady: false
   property bool hasReport: false
+  property bool infoOpen: false
   property string uiLanguage: Qt.locale().name.toLowerCase().startsWith("es") ? "es" : "en"
   property string sourceText: ""
   property string status: ""
@@ -44,6 +45,7 @@ Item {
     root.backdropReady = false
     backdropGuard.restart()
     root.hasReport = false
+    root.infoOpen = false
     root.report = ({})
     root.status = root.idleHint
     root.runHelper("read-clipboard", "", function(payload) {
@@ -187,7 +189,7 @@ Item {
     BorderSurface {
       id: card
       width: root.cardWidth
-      height: root.cardHeight
+      height: root.cardHeight + (root.infoOpen ? Style.space(72) : 0)
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.topMargin: Style.bar.sizeHorizontal + Style.gapsOut
@@ -211,7 +213,7 @@ Item {
           height: titleColumn.implicitHeight
           Column {
             id: titleColumn
-            width: parent.width - closeButton.width - Style.spacing.md
+            width: parent.width - closeButton.width - infoButton.width - Style.spacing.md * 2
             spacing: Style.spacing.xs
             Text {
               text: root.words("aismell · revisión editorial", "aismell · editorial review")
@@ -230,9 +232,7 @@ Item {
             }
             Text {
               width: parent.width
-              text: root.words(
-                "Encuentra años o autores ausentes, duplicados, mezcla de estilos y señales de redacción formulaica. No inventa una validación externa.",
-                "Finds missing years or authors, duplicates, mixed styles, and formulaic writing signals. It does not fake external validation.")
+              text: root.words("Revisión local de estructura y señales de aismell.", "Local structure and aismell signal review.")
               color: Color.menu.text
               opacity: 0.66
               font.family: Style.font.menuFamily
@@ -241,12 +241,43 @@ Item {
             }
           }
           Button {
+            id: infoButton
+            anchors.verticalCenter: parent.verticalCenter
+            text: "(i)"
+            selected: root.infoOpen
+            tooltipText: root.words("Cómo revisa la bibliografía", "How the bibliography is checked")
+            onClicked: root.infoOpen = !root.infoOpen
+          }
+          Button {
             id: closeButton
             anchors.verticalCenter: parent.verticalCenter
             text: "×"
             fontSize: Style.font.iconLarge
             tooltipText: root.words("Cerrar (Esc)", "Close (Esc)")
             onClicked: root.close()
+          }
+        }
+
+        Rectangle {
+          width: parent.width
+          height: infoText.implicitHeight + Style.spacing.md * 2
+          visible: root.infoOpen
+          radius: Style.cornerRadius
+          color: Style.controlFill(false, false, Color.menu.text, Color.accent)
+          border.width: 1
+          border.color: Color.menu.border
+          Text {
+            id: infoText
+            anchors.fill: parent
+            anchors.margins: Style.spacing.md
+            text: root.words(
+              "Cómo revisa: separa las entradas, busca autor y año, normaliza DOI/URL, detecta duplicados, compara estilos de fecha y pasa los primeros 3.000 caracteres por aismell.",
+              "How it checks: splits entries, looks for author and year, normalizes DOI/URLs, detects duplicates, compares date styles, and sends the first 3,000 characters through aismell.")
+            color: Color.menu.text
+            opacity: 0.76
+            font.family: Style.font.menuFamily
+            font.pixelSize: Style.font.caption
+            wrapMode: Text.Wrap
           }
         }
 
@@ -426,17 +457,6 @@ Item {
                 font.pixelSize: Style.font.bodySmall
                 wrapMode: Text.Wrap
               }
-            }
-            Text {
-              width: parent.width
-              text: root.words(
-                "Esto revisa el texto pegado. No confirma que una fuente exista ni que un DOI resuelva.",
-                "This checks the pasted text. It does not confirm that a source exists or that a DOI resolves.")
-              color: Color.menu.text
-              opacity: 0.52
-              font.family: Style.font.menuFamily
-              font.pixelSize: Style.font.caption
-              wrapMode: Text.Wrap
             }
           }
         }
