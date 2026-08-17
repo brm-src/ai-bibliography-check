@@ -10,9 +10,9 @@ Item {
 
   readonly property string pluginId: "io.github.brm-src.ai-bibliography-check"
   readonly property bool isSpanish: uiLanguage === "es"
-  readonly property int cardWidth: Math.min(Style.space(520), panel.width - Style.gapsOut * 2)
+  readonly property int cardWidth: Math.min(Style.space(500), panel.width - Style.gapsOut * 2)
   readonly property int cardHeight: Math.min(
-    root.hasReport ? Style.space(560) : Style.space(430),
+    root.hasReport ? Style.space(500) : Style.space(390),
     panel.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
   property bool opened: false
   property bool busy: false
