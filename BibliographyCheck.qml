@@ -124,6 +124,7 @@ Item {
     function show(): string { root.open(); return "ok" }
     function hide(): string { root.close(); return "ok" }
     function toggle(): string { root.toggle(); return "ok" }
+    function info(): string { root.infoOpen = !root.infoOpen; return "ok" }
     function check(): string { root.check(); return "ok" }
     function state(): string { return root.opened ? "open" : "closed" }
   }
