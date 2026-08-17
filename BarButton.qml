@@ -8,9 +8,9 @@ BarIconButton {
   property string moduleName: "io.github.brm-src.ai-bibliography-check"
   property var settings: ({})
 
-  slotSize: bar ? bar.barSize : 27
-  opticalSize: 16
-  fontSize: 12
+  slotSize: Style.bar.iconSlot
+  opticalSize: Style.bar.iconCanvas
+  fontSize: Style.bar.iconFont
   text: "\uf02d"
   tooltipText: root.isSpanish ? "Revisar bibliografía" : "Check bibliography"
   readonly property bool isSpanish: Qt.locale().name.toLowerCase().startsWith("es")

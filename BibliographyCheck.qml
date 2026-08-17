@@ -10,7 +10,10 @@ Item {
 
   readonly property string pluginId: "io.github.brm-src.ai-bibliography-check"
   readonly property bool isSpanish: uiLanguage === "es"
-  readonly property int cardWidth: Math.min(Style.space(620), panel.width - Style.gapsOut * 2)
+  readonly property int cardWidth: Math.min(Style.space(520), panel.width - Style.gapsOut * 2)
+  readonly property int cardHeight: Math.min(
+    root.hasReport ? Style.space(560) : Style.space(430),
+    panel.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
   property bool opened: false
   property bool busy: false
   property bool backdropReady: false
@@ -154,6 +157,12 @@ Item {
     anchors { top: true; bottom: true; left: true; right: true }
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
+    mask: Region {
+      x: card.x
+      y: card.y
+      width: card.visible ? card.width : 0
+      height: card.visible ? card.height : 0
+    }
     WlrLayershell.namespace: root.pluginId
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
@@ -178,7 +187,7 @@ Item {
     BorderSurface {
       id: card
       width: root.cardWidth
-      height: Math.min(Style.space(650), parent.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
+      height: root.cardHeight
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.topMargin: Style.bar.sizeHorizontal + Style.gapsOut
@@ -204,6 +213,14 @@ Item {
             id: titleColumn
             width: parent.width - closeButton.width - Style.spacing.md
             spacing: Style.spacing.xs
+            Text {
+              text: root.words("aismell · revisión editorial", "aismell · editorial review")
+              color: Color.accent
+              font.family: Style.font.menuFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+              font.letterSpacing: 0.8
+            }
             Text {
               text: root.words("revisar bibliografía", "check bibliography")
               color: Color.menu.text
