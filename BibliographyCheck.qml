@@ -137,7 +137,9 @@ Item {
           : root.words("servicio no disponible", "service unavailable")
     var source = item.match ? item.match.source : (item.sources || []).map(function(source) { return source.source }).join(" + ")
     var unavailable = (item.sources || []).filter(function(source) { return source.status === "unavailable" }).map(function(source) { return source.source })
+    var responded = (item.sources || []).filter(function(source) { return source.status === "responded" && (!item.match || source.source !== item.match.source) }).map(function(source) { return source.source })
     if (unavailable.length) source += root.words(" · " + unavailable.join(" + ") + " no disponible", " · " + unavailable.join(" + ") + " unavailable")
+    if (responded.length) source += root.words(" · " + responded.join(" + ") + " respondió", " · " + responded.join(" + ") + " responded")
     return root.words("Entrada ", "Entry ") + item.entry + " · " + status + " · " + source + (item.scholarUrl ? " · Google Scholar ↗" : "")
   }
 

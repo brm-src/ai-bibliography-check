@@ -20,7 +20,7 @@ Es un revisor editorial, no un detector forense de IA. Una coincidencia de catá
 - Marca entradas sin un autor reconocible o sin un año de publicación de cuatro dígitos.
 - Detecta DOI/URL repetidos y entradas completas duplicadas.
 - Avisa si la lista mezcla años entre paréntesis, como `(2024)`, con años sueltos, como `2024.`.
-- Envía las entradas con DOI a Crossref y OpenAlex para una búsqueda exacta; las entradas sin DOI usan consultas de título + autor + año.
+- Envía las entradas con DOI a Crossref y OpenAlex para una búsqueda exacta; las entradas sin DOI usan consultas de título + autor + año. Si OpenAlex no es accesible desde el Worker, el helper de Omarchy lo reintenta localmente.
 - Muestra `encontrada`, `posible`, `sin coincidencia` o `servicio no disponible` por entrada e identifica el catálogo que devolvió la coincidencia.
 - Añade un enlace de búsqueda directa a Google Scholar por entrada; Google Scholar se abre en el navegador y no se raspa desde el Worker.
 - Envía los primeros 3.000 caracteres al analizador de aismell para buscar redacción formulaica; las comprobaciones estructurales cubren todo el texto pegado.

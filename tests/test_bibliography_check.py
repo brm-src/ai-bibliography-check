@@ -38,7 +38,29 @@ class BibliographyCheckTests(unittest.TestCase):
         with patch.object(bibliography_check, "_post_check", return_value={"error": "unavailable"}):
             self.assertEqual(check_payload(BIBLIOGRAPHY), {"ok": False, "errorCode": "check-unavailable"})
 
-    def test_reads_clipboard_without_calling_service(self):
+    def test_uses_local_openalex_fallback_when_worker_cannot_reach_it(self):
+        report = {
+            "score": 100,
+            "findings": [],
+            "entries": [{"number": 1, "title": "Manual de investigación", "authorPrefix": "García, M.", "year": "2024", "identifier": "doi:10.1234/demo"}],
+            "lookup": {
+                "results": [{
+                    "entry": 1,
+                    "status": "found",
+                    "score": 0.9,
+                    "sources": [{"source": "Crossref", "status": "responded"}, {"source": "OpenAlex", "status": "unavailable"}],
+                    "match": {"source": "Crossref", "title": "Manual de investigación"},
+                }],
+            },
+        }
+        with patch.object(bibliography_check, "_post_check", return_value=report), \
+             patch.object(bibliography_check, "_openalex_lookup", return_value=("found", 1.0, {"source": "OpenAlex", "title": "Manual de investigación"})):
+            payload = check_payload(BIBLIOGRAPHY)
+        result = payload["report"]["lookup"]["results"][0]
+        self.assertEqual(result["match"]["source"], "OpenAlex")
+        self.assertEqual(result["sources"][1]["status"], "responded")
+        self.assertEqual(result["sources"][1]["transport"], "local-helper")
+
         output = io.StringIO()
         with patch.object(bibliography_check, "_read_clipboard", return_value=BIBLIOGRAPHY), \
              patch.object(bibliography_check, "_post_check", side_effect=AssertionError("opening must not call service")), \

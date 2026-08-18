@@ -12,7 +12,7 @@
 
 When the user presses `check` / `revisar`, the current text is sent over HTTPS to the public aismell bibliography Worker. The Worker performs structural checks, queries Crossref and OpenAlex for up to 12 entries, and runs the aismell analyzer over the first 3,000 characters.
 
-Crossref and OpenAlex receive the bibliography fragments needed for DOI or title/author/year lookup. Their own service and retention policies apply to those requests.
+Crossref and OpenAlex receive the bibliography fragments needed for DOI or title/author/year lookup. If the Worker cannot reach OpenAlex, the Omarchy helper retries that OpenAlex lookup locally. Their own service and retention policies apply to those requests.
 
 The Worker has no application storage for submitted text and returns `Cache-Control: no-store`. Cloudflare still handles the request as infrastructure, so this tool is not appropriate for passwords, private keys, regulated information, confidential client material, or text that must stay offline. Cloudflare's service and retention policies apply to infrastructure outside this repository.
 

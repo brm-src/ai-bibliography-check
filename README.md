@@ -20,7 +20,7 @@ It is an editorial checker, not a forensic AI detector. A catalog match is evide
 - Flags entries without a recognizable author or four-digit publication year.
 - Detects repeated DOI/URL identifiers and repeated full entries.
 - Warns when the list mixes parenthetical years like `(2024)` with bare years like `2024.`.
-- Sends DOI-bearing entries to Crossref and OpenAlex for exact lookup; entries without DOI use title + author + year queries.
+- Sends DOI-bearing entries to Crossref and OpenAlex for exact lookup; entries without DOI use title + author + year queries. If OpenAlex is unreachable from the Worker, the Omarchy helper retries it locally.
 - Shows `found`, `possible`, `no match`, or `service unavailable` per entry and identifies the catalog that supplied a match.
 - Adds a direct Google Scholar search link for each entry; Google Scholar is opened in the browser instead of scraped by the Worker.
 - Sends the first 3,000 characters to the aismell analyzer for formulaic-writing signals; structural checks cover the full pasted text.
