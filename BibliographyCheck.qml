@@ -216,7 +216,9 @@ Item {
     BorderSurface {
       id: card
       width: root.cardWidth
-      height: root.cardHeight + (root.infoOpen ? Style.space(140) : 0)
+      height: Math.min(
+        Math.max(Style.space(360), contentColumn.implicitHeight + card.contentTopInset + card.contentBottomInset),
+        parent.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
       anchors.top: parent.top
       anchors.right: parent.right
       anchors.topMargin: Style.bar.sizeHorizontal + Style.gapsOut
@@ -228,6 +230,7 @@ Item {
       MouseArea { anchors.fill: parent }
 
       Column {
+        id: contentColumn
         anchors.fill: parent
         anchors.topMargin: card.contentTopInset
         anchors.rightMargin: card.contentRightInset
@@ -290,7 +293,7 @@ Item {
 
         Rectangle {
           width: parent.width
-          height: infoText.implicitHeight + Style.spacing.md * 2
+          height: root.infoOpen ? infoText.implicitHeight + Style.spacing.md * 2 : 0
           visible: root.infoOpen
           radius: Style.cornerRadius
           color: Style.controlFill(false, false, Color.menu.text, Color.accent)
@@ -323,7 +326,7 @@ Item {
 
         Item {
           width: parent.width
-          height: Style.space(5)
+          height: root.busy ? Style.space(5) : 0
           visible: root.busy
           clip: true
           Rectangle { anchors.fill: parent; radius: height / 2; color: Color.menu.text; opacity: 0.14 }
@@ -345,7 +348,7 @@ Item {
 
         BorderSurface {
           width: parent.width
-          height: Style.space(150)
+          height: Style.space(120)
           radius: Style.cornerRadius
           color: Style.controlFill(false, false, Color.menu.text, Color.accent)
           borderSpec: Border.controlSpec("normal", Color.menu.text, Color.accent)
@@ -427,7 +430,7 @@ Item {
 
         Flickable {
           width: parent.width
-          height: parent.height - y
+          height: root.hasReport ? Math.min(Style.space(210), resultsColumn.implicitHeight) : 0
           contentWidth: width
           contentHeight: resultsColumn.implicitHeight
           clip: true
