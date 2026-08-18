@@ -22,6 +22,7 @@ Es un revisor editorial, no un detector forense de IA. Una coincidencia de catá
 - Avisa si la lista mezcla años entre paréntesis, como `(2024)`, con años sueltos, como `2024.`.
 - Envía las entradas con DOI a Crossref y OpenAlex para una búsqueda exacta; las entradas sin DOI usan consultas de título + autor + año.
 - Muestra `encontrada`, `posible`, `sin coincidencia` o `servicio no disponible` por entrada e identifica el catálogo que devolvió la coincidencia.
+- Añade un enlace de búsqueda directa a Google Scholar por entrada; Google Scholar se abre en el navegador y no se raspa desde el Worker.
 - Envía los primeros 3.000 caracteres al analizador de aismell para buscar redacción formulaica; las comprobaciones estructurales cubren todo el texto pegado.
 - Mantiene el texto original editable y nunca modifica automáticamente la aplicación enfocada.
 
@@ -74,6 +75,7 @@ Consulta [PRIVACY.md](PRIVACY.md).
 
 - Crossref y OpenAlex pueden devolver una coincidencia de catálogo, pero esa coincidencia todavía requiere revisión humana.
 - Las entradas sin DOI se buscan por título + autor + año y usan un score de similitud; un score bajo se muestra como `sin coincidencia`.
+- Google Scholar está disponible como enlace de búsqueda directa en el navegador; el Worker no raspa Scholar ni intenta saltarse sus CAPTCHA o límites.
 - El reconocimiento de autores es deliberadamente conservador y puede marcar estilos válidos que no comiencen con un autor convencional.
 - Aismell solo ve los primeros 3.000 caracteres para señales lingüísticas; las comprobaciones estructurales cubren los 12.000 caracteres.
 - El endpoint requiere conexión a internet.

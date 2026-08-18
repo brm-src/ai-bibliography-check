@@ -22,6 +22,7 @@ It is an editorial checker, not a forensic AI detector. A catalog match is evide
 - Warns when the list mixes parenthetical years like `(2024)` with bare years like `2024.`.
 - Sends DOI-bearing entries to Crossref and OpenAlex for exact lookup; entries without DOI use title + author + year queries.
 - Shows `found`, `possible`, `no match`, or `service unavailable` per entry and identifies the catalog that supplied a match.
+- Adds a direct Google Scholar search link for each entry; Google Scholar is opened in the browser instead of scraped by the Worker.
 - Sends the first 3,000 characters to the aismell analyzer for formulaic-writing signals; structural checks cover the full pasted text.
 - Keeps the original text editable and never modifies the focused application automatically.
 
@@ -74,6 +75,7 @@ See [PRIVACY.md](PRIVACY.md).
 
 - Crossref and OpenAlex can return a catalog match, but that match still needs human review.
 - Entries without a DOI are searched by title + author + year and use a similarity score; a low score is shown as `no match`.
+- Google Scholar is available as a direct browser search link; the Worker does not scrape Scholar or bypass its CAPTCHA/rate limits.
 - Author recognition is intentionally conservative and can flag valid styles that do not begin with a conventional author string.
 - Aismell sees only the first 3,000 characters for linguistic signals; local structural checks cover all 12,000 characters.
 - The endpoint requires an internet connection.

@@ -123,8 +123,8 @@ Item {
     var found = results.filter(function(item) { return item.status === "found" }).length
     var possible = results.filter(function(item) { return item.status === "possible" }).length
     return root.words(
-      "Búsqueda externa: " + found + " coincidencias" + (possible ? " · " + possible + " posibles" : "") + " · Crossref + OpenAlex",
-      "External search: " + found + " matches" + (possible ? " · " + possible + " possible" : "") + " · Crossref + OpenAlex")
+      "Búsqueda externa: " + found + " coincidencias" + (possible ? " · " + possible + " posibles" : "") + " · Crossref + OpenAlex · Google Scholar ↗",
+      "External search: " + found + " matches" + (possible ? " · " + possible + " possible" : "") + " · Crossref + OpenAlex · Google Scholar ↗")
   }
 
   function lookupLabel(item) {
@@ -138,7 +138,7 @@ Item {
     var source = item.match ? item.match.source : (item.sources || []).map(function(source) { return source.source }).join(" + ")
     var unavailable = (item.sources || []).filter(function(source) { return source.status === "unavailable" }).map(function(source) { return source.source })
     if (unavailable.length) source += root.words(" · " + unavailable.join(" + ") + " no disponible", " · " + unavailable.join(" + ") + " unavailable")
-    return root.words("Entrada ", "Entry ") + item.entry + " · " + status + " · " + source
+    return root.words("Entrada ", "Entry ") + item.entry + " · " + status + " · " + source + (item.scholarUrl ? " · Google Scholar ↗" : "")
   }
 
   IpcHandler {
@@ -299,8 +299,8 @@ Item {
             anchors.fill: parent
             anchors.margins: Style.spacing.md
             text: root.words(
-              "Fuente: texto pegado. Búsqueda externa: Crossref REST y OpenAlex Works, por DOI exacto o consulta de título + autor + año. Parser: líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: autor, año, título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
-              "Source: pasted text. External search: Crossref REST and OpenAlex Works, by exact DOI or title + author + year query. Parser: blank lines, [n]/1. markers, and author-year cuts. Fields: author, year, title, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
+              "Fuente: texto pegado. Búsqueda externa: Crossref REST y OpenAlex Works, por DOI exacto o consulta de título + autor + año. Google Scholar se abre como búsqueda directa por entrada. Parser: líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: autor, año, título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
+              "Source: pasted text. External search: Crossref REST and OpenAlex Works, by exact DOI or title + author + year query. Google Scholar opens as a direct per-entry search. Parser: blank lines, [n]/1. markers, and author-year cuts. Fields: author, year, title, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
             color: Color.menu.text
             opacity: 0.76
             font.family: Style.font.menuFamily
@@ -486,14 +486,25 @@ Item {
             }
             Repeater {
               model: root.report.lookup ? (root.report.lookup.results || []) : []
-              delegate: Text {
+              delegate: Item {
                 width: resultsColumn.width
-                text: "• " + root.lookupLabel(modelData)
-                color: modelData.status === "found" ? Color.accent : Color.menu.text
-                opacity: modelData.status === "found" ? 0.92 : 0.62
-                font.family: Style.font.menuFamily
-                font.pixelSize: Style.font.caption
-                wrapMode: Text.Wrap
+                height: resultLabel.implicitHeight
+                Text {
+                  id: resultLabel
+                  width: parent.width
+                  text: "• " + root.lookupLabel(modelData)
+                  color: modelData.status === "found" ? Color.accent : Color.menu.text
+                  opacity: modelData.status === "found" ? 0.92 : 0.62
+                  font.family: Style.font.menuFamily
+                  font.pixelSize: Style.font.caption
+                  wrapMode: Text.Wrap
+                }
+                MouseArea {
+                  anchors.fill: parent
+                  enabled: modelData.scholarUrl !== ""
+                  cursorShape: Qt.PointingHandCursor
+                  onClicked: Qt.openUrlExternally(modelData.scholarUrl)
+                }
               }
             }
             Repeater {
