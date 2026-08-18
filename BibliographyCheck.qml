@@ -11,9 +11,7 @@ Item {
   readonly property string pluginId: "io.github.brm-src.ai-bibliography-check"
   readonly property bool isSpanish: uiLanguage === "es"
   readonly property int cardWidth: Math.min(Style.space(500), panel.width - Style.gapsOut * 2)
-  readonly property int cardHeight: Math.min(
-    root.hasReport ? Style.space(500) : Style.space(390),
-    panel.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
+
   property bool opened: false
   property bool busy: false
   property bool backdropReady: false
@@ -35,7 +33,7 @@ Item {
     switch (payload.errorCode) {
       case "empty": return root.words("Pega o escribe una bibliografía primero.", "Paste or type a bibliography first.")
       case "too-long": return root.words("Es demasiado larga. Usa menos de 12.000 caracteres.", "That is too long. Use fewer than 12,000 characters.")
-      case "check-unavailable": return root.words("No hay conexión con aismell. Intenta de nuevo.", "aismell is unavailable. Try again.")
+      case "check-unavailable": return root.words("No hay conexión con el servicio. Intenta de nuevo.", "The service is unavailable. Try again.")
       default: return root.words("No pude revisar la bibliografía.", "I could not check the bibliography.")
     }
   }
@@ -91,7 +89,7 @@ Item {
       root.status = root.words("Pega o escribe una bibliografía primero.", "Paste or type a bibliography first.")
       return
     }
-    root.status = root.words("Buscando en Crossref y OpenAlex; analizando señales de aismell…", "Searching Crossref and OpenAlex; analyzing aismell signals…")
+    root.status = root.words("Buscando coincidencias en Crossref y OpenAlex…", "Searching for matches in Crossref and OpenAlex…")
     root.runHelper("check-stdin", root.sourceText, function(payload) {
       if (!payload.ok) {
         root.hasReport = false
@@ -217,7 +215,7 @@ Item {
       id: card
       width: root.cardWidth
       height: Math.min(
-        Math.max(Style.space(360), contentColumn.implicitHeight + card.contentTopInset + card.contentBottomInset),
+        Math.max(Style.space(300), contentColumn.implicitHeight + card.contentTopInset + card.contentBottomInset),
         parent.height - Style.bar.sizeHorizontal - Style.gapsOut * 3)
       anchors.top: parent.top
       anchors.right: parent.right
@@ -246,29 +244,13 @@ Item {
             width: parent.width - closeButton.width - infoButton.width - Style.spacing.md * 2
             spacing: Style.spacing.xs
             Text {
-              text: root.words("aismell · revisión editorial", "aismell · editorial review")
-              color: Color.accent
-              font.family: Style.font.menuFamily
-              font.pixelSize: Style.font.caption
-              font.bold: true
-              font.letterSpacing: 0.8
-            }
-            Text {
               text: root.words("revisar bibliografía", "check bibliography")
               color: Color.menu.text
               font.family: Style.font.menuFamily
               font.pixelSize: Style.font.title
               font.bold: true
             }
-            Text {
-              width: parent.width
-              text: root.words("Revisión local de estructura y señales de aismell.", "Local structure and aismell signal review.")
-              color: Color.menu.text
-              opacity: 0.66
-              font.family: Style.font.menuFamily
-              font.pixelSize: Style.font.bodySmall
-              wrapMode: Text.Wrap
-            }
+
           }
           PanelActionButton {
             id: infoButton
@@ -304,8 +286,8 @@ Item {
             anchors.fill: parent
             anchors.margins: Style.spacing.md
             text: root.words(
-              "Fuente: texto pegado. Búsqueda externa: Crossref REST y OpenAlex Works, por DOI exacto o consulta de título + autor + año. Google Scholar se abre como búsqueda directa por entrada. Parser: líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: autor, año, título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. aismell analiza hasta 3.000 caracteres.",
-              "Source: pasted text. External search: Crossref REST and OpenAlex Works, by exact DOI or title + author + year query. Google Scholar opens as a direct per-entry search. Parser: blank lines, [n]/1. markers, and author-year cuts. Fields: author, year, title, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. aismell analyzes up to 3,000 characters.")
+              "Fuente: texto pegado. Búsqueda externa: Crossref REST y OpenAlex Works, por DOI exacto o consulta de título + autor + año. Google Scholar se abre como búsqueda directa por entrada. Parser: líneas en blanco, marcadores [n]/1. y cortes autor-año. Campos: autor, año, título, DOI/URL, páginas/volumen y estilo de fecha. Índices: DOI/URL, entrada y título normalizados. Análisis lingüístico: hasta 3.000 caracteres.",
+              "Source: pasted text. External search: Crossref REST and OpenAlex Works, by exact DOI or title + author + year query. Google Scholar opens as a direct per-entry search. Parser: blank lines, [n]/1. markers, and author-year cuts. Fields: author, year, title, DOI/URL, pages/volume, and date style. Indexes: normalized DOI/URL, entry, and title. Linguistic analysis: up to 3,000 characters.")
             color: Color.menu.text
             opacity: 0.76
             font.family: Style.font.menuFamily
@@ -348,7 +330,7 @@ Item {
 
         BorderSurface {
           width: parent.width
-          height: Style.space(120)
+          height: Style.space(110)
           radius: Style.cornerRadius
           color: Style.controlFill(false, false, Color.menu.text, Color.accent)
           borderSpec: Border.controlSpec("normal", Color.menu.text, Color.accent)
@@ -397,7 +379,7 @@ Item {
             text: root.words("revisar", "check")
             selected: true
             active: root.sourceText.trim() !== "" && !root.busy
-            tooltipText: root.words("Analiza la bibliografía con aismell.", "Analyze the bibliography with aismell.")
+            tooltipText: root.words("Busca coincidencias y revisa la estructura.", "Search for matches and review the structure.")
             onClicked: root.check()
           }
           Button {
@@ -472,7 +454,7 @@ Item {
             Text {
               width: parent.width
               visible: root.report.analysis && root.report.analysis.truncated
-              text: root.words("aismell analizó los primeros 3.000 caracteres; las comprobaciones estructurales cubren todo el texto.", "aismell analyzed the first 3,000 characters; structural checks cover the full text.")
+              text: root.words("El análisis lingüístico cubre los primeros 3.000 caracteres; las comprobaciones estructurales cubren todo el texto.", "Linguistic analysis covers the first 3,000 characters; structural checks cover the full text.")
               color: Color.menu.text
               opacity: 0.58
               font.family: Style.font.menuFamily
